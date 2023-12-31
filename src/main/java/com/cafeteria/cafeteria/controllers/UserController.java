@@ -1,5 +1,7 @@
 package com.cafeteria.cafeteria.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
+    @Valid
     public ResponseEntity<UserModel> register(@RequestBody UserRegisterModel userRegisterModel) {
         UserModel userModel = this.userService.register(userRegisterModel);
 
@@ -38,6 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @Valid
     public ResponseEntity<UserModel> login(@RequestBody UserLoginModel userRegisterModel) {
         UserModel userModel = this.userService.login(userRegisterModel);
 

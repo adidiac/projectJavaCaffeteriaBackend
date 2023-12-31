@@ -17,4 +17,6 @@ public interface OrderService {
     List<ViewOrder> getAllOrders();
     void createOrder(CreateOrder createOrder);
     void updateOrderStatus(UpdateOrderStatus updateOrderStatus);
+
+    Integer getTotalPriceOfOrder(Long orderId);
 }

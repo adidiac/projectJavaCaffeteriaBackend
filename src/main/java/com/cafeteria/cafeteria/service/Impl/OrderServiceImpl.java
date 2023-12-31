@@ -87,4 +87,14 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(updateOrderStatus.status);
         save(order);
     }
+
+    @Override
+    public Integer getTotalPriceOfOrder(Long orderId) {
+        var orderItems = orderItemService.getAllOrderItemsByOrderId(orderId);
+        var totalPrice = 0;
+        for (var orderItem : orderItems) {
+            totalPrice += Integer.valueOf(orderItem.price);
+        }
+        return totalPrice;
+    }
 }

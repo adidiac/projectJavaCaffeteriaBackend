@@ -13,6 +13,9 @@ import com.cafeteria.cafeteria.ViewModels.CreateFeedback;
 import com.cafeteria.cafeteria.service.FeedbackService;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -35,6 +38,7 @@ public class FeedbackController {
 
     @PostMapping
     @ValidateTokenUser
+    @Valid
     public ResponseEntity<Void> createFeedback(@RequestParam CreateFeedback feedback) {
         try {
             feedbackService.createFeedback(feedback);

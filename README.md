@@ -43,7 +43,7 @@
 - `     `The system should track the inventory of ingredients or stock items used in menu items.
 - `     `Alerts should be generated when inventory levels are low, and administrators should be able to update stock levels.
 
-**9.     Reporting and Analytics** 
+**9.     Reporting and Analytics** - done
 
 - `     `The system should generate reports on sales, popular menu items, and customer feedback.
 - `     `Administrators should have access to analytics to make informed business decisions.
