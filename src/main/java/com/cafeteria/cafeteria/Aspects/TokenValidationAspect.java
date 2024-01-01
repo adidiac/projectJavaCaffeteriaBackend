@@ -1,7 +1,7 @@
 package com.cafeteria.cafeteria.Aspects;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import com.cafeteria.cafeteria.Utils.JwtTokenUtil;
@@ -16,8 +16,8 @@ public class TokenValidationAspect {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    @Around("@annotation(ValidateTokenAdmin)")
-    public void validateTokenBeforeMethodExecution(ProceedingJoinPoint jointPoint) {
+    @Before("@annotation(ValidateTokenAdmin)")
+    public void validateTokenBeforeMethodExecution(JoinPoint jointPoint) {
         // Get token from the request header or wherever it's present
         // String token = request.getHeader("Authorization");
         Object[] args = jointPoint.getArgs();
@@ -34,10 +34,12 @@ public class TokenValidationAspect {
         if (!jwtTokenUtil.validateTokenAdmin(token)) {
             throw new RuntimeException("Invalid token");
         }
+
+       //  return jointPoint.proceed();
     }
 
-    @Around("@annotation(ValidateTokenUser)")
-    public void validateTokenBeforeMethodExecutionUser(ProceedingJoinPoint jointPoint) {
+    @Before("@annotation(ValidateTokenUser)")
+    public void validateTokenBeforeMethodExecutionUser(JoinPoint jointPoint) {
         // Get token from the request header or wherever it's present
         // String token = request.getHeader("Authorization");
         Object[] args = jointPoint.getArgs();
@@ -65,8 +67,10 @@ public class TokenValidationAspect {
         }
 
         // Validate token
-        if (!jwtTokenUtil.validateTokenAdmin(token)) {
+        if (!jwtTokenUtil.validateTokenUser(token)) {
             throw new RuntimeException("Invalid token");
         }
+
+       // return jointPoint.proceed();
     }
 }

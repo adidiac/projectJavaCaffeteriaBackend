@@ -75,10 +75,10 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(userService.getUserIdByUsername(createOrder.username));
         order.setOrderStatus("Pending");
         order.setDateFromLocalDate();
+        save(order);
         createOrder.orderItems.forEach(orderItem -> {
             orderItemService.createOrderItem(orderItem, order.getOrderId());
         });
-        save(order);
     }
 
     @Override

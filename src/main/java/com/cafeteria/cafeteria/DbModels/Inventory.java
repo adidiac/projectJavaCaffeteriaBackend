@@ -1,12 +1,19 @@
 package com.cafeteria.cafeteria.DbModels;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "inventory")
 public class Inventory {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "inventory_id")
     private Long inventory_id;
     private String item_name;
     private int quantity;

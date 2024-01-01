@@ -3,11 +3,15 @@ package com.cafeteria.cafeteria.service.Impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
 import com.cafeteria.cafeteria.service.AnalyticsService;
 import com.cafeteria.cafeteria.service.MenuItemService;
 import com.cafeteria.cafeteria.service.OrderItemService;
 import com.cafeteria.cafeteria.service.OrderService;
 
+@Service
 public class AnalyticsServiceImpl implements AnalyticsService {
 
     private final MenuItemService menuItemService;

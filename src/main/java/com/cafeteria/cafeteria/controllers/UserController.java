@@ -37,7 +37,7 @@ public class UserController {
             return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(userModel);
         }
 
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @PostMapping("/login")

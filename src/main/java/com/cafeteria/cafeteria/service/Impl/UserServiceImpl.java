@@ -21,7 +21,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserModel register(UserRegisterModel userRegisterModel) {
         // register user
-        boolean userExist = this.userRepository.findAll().stream().anyMatch(user -> user.getUsername().equals(userRegisterModel.username));
+        var users= this.userRepository.findAll();
+        boolean userExist = users.stream().anyMatch(user -> user.getUsername().equals(userRegisterModel.username));
 
         if (userExist) {
             return null;

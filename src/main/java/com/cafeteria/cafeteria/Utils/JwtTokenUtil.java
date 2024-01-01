@@ -1,18 +1,19 @@
 package com.cafeteria.cafeteria.Utils;
 
+import java.security.Key;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenUtil {
-
-    private static final String SECRET_KEY_ADMIN = "secretAdmin";
-    private static final String SECRET_KEY_USER="secretUser";
+    // keys need to be at least 256 bits long - 32 bytes
+    private static final String SECRET_KEY_ADMIN = "secretAdmin000000000000000000000";
+    private static final String SECRET_KEY_USER="secretUser0000000000000000000000";
     private static final long VALIDITY_DURATION_MS = 3600000; // Token validity duration in milliseconds (e.g., 1 hour)
 
     public String generateTokenAdmin(String username, String role) {
@@ -21,12 +22,12 @@ public class JwtTokenUtil {
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + VALIDITY_DURATION_MS);
-
+        Key SECRET_ADMIN = Keys.hmacShaKeyFor(SECRET_KEY_ADMIN.getBytes());
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY_ADMIN)
+                .signWith(SECRET_ADMIN)
                 .compact();
     }
 
@@ -36,26 +37,38 @@ public class JwtTokenUtil {
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + VALIDITY_DURATION_MS);
-
+        if (role.equals("admin")) {
+            Key SECRET_ADMIN = Keys.hmacShaKeyFor(SECRET_KEY_ADMIN.getBytes());
+            return Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuedAt(now)
+                    .setExpiration(validity)
+                    .signWith(SECRET_ADMIN)
+                    .compact();
+        }
+        Key SECRET_USER = Keys.hmacShaKeyFor(SECRET_KEY_USER.getBytes());
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY_USER)
+                .signWith(SECRET_USER)
                 .compact();
     }
 
     public String getUsernameUser(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY_USER).parseClaimsJws(token).getBody().getSubject();
+        Key SECRET_USER = Keys.hmacShaKeyFor(SECRET_KEY_USER.getBytes());
+        return Jwts.parserBuilder().setSigningKey(SECRET_USER).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public String getUsernameAdmin(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY_ADMIN).parseClaimsJws(token).getBody().getSubject();
+        Key SECRET_ADMIN = Keys.hmacShaKeyFor(SECRET_KEY_ADMIN.getBytes());
+        return Jwts.parserBuilder().setSigningKey(SECRET_ADMIN).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateTokenUser(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY_USER).parseClaimsJws(token);
+            Key SECRET_USER = Keys.hmacShaKeyFor(SECRET_KEY_USER.getBytes());
+            Jwts.parserBuilder().setSigningKey(SECRET_USER).build().parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
@@ -64,7 +77,8 @@ public class JwtTokenUtil {
 
     public boolean validateTokenAdmin(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY_ADMIN).parseClaimsJws(token);
+            Key SECRET_ADMIN = Keys.hmacShaKeyFor(SECRET_KEY_ADMIN.getBytes());
+            Jwts.parserBuilder().setSigningKey(SECRET_ADMIN).build().parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;

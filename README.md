@@ -23,12 +23,12 @@
 
 2. ## Rest of requirements:
 
-**5.     User Authentication**   - done
+**5.     User Authentication**   - done - tested
 
 - `     `The system should provide authentication for admins and customers.
 - `     `Staff members should have different roles (e.g., admin, customer) with varying levels of access.
 
-**6.     Introduce Authorization with JWT**   - done
+**6.     Introduce Authorization with JWT**   - done -tested
 
 - `     `The system should provide authorization with JWT system.
 

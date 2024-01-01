@@ -99,7 +99,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItem.setOrderId(order_id);
         orderItem.setQuantity(CreateOrderItem.quantity);
         orderItem.setSpecialInstructions(CreateOrderItem.specialInstructions);
-        orderItem.setPrice((int)menuItemService.getMenuItemById(order_id).getPrice());
+        orderItem.setPrice((int)menuItemService.getMenuItemById(CreateOrderItem.menuItemId).getPrice());
         orderItemRepository.save(orderItem);
     }
 }

@@ -33,7 +33,7 @@ public class OrderController {
 
     @GetMapping
     @ValidateTokenAdmin
-    public List<ViewOrder> getAllOrders() {
+    public List<ViewOrder> getAllOrders(@RequestHeader("Authorization") String token) {
         return orderService.getAllOrders();
     }
     

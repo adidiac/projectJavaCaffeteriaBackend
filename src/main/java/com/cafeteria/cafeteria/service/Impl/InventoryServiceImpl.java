@@ -2,10 +2,12 @@ package com.cafeteria.cafeteria.service.Impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.cafeteria.cafeteria.DbModels.Inventory;
 import com.cafeteria.cafeteria.repository.InventoryRepository;
 import com.cafeteria.cafeteria.service.InventoryService;
-
+@Service
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
 
