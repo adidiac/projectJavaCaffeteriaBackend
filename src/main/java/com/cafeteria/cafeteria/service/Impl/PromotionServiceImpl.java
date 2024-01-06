@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.cafeteria.cafeteria.DbModels.Promotion;
@@ -69,5 +68,15 @@ public class PromotionServiceImpl implements PromotionService {
             }
         }
         return price;
+    }
+
+    @Override
+    public void deletePromotionByMenuItemId(Long menuItemId) {
+        var promotions = promotionRepository.findAll();
+        for (Promotion promotion : promotions) {
+            if (promotion.getMenuItemId() == menuItemId) {
+                promotionRepository.deleteById(promotion.getPromotionId());
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@ import com.cafeteria.cafeteria.CustomExceptions.InternalServerErrorException;
 import com.cafeteria.cafeteria.DbModels.MenuItem;
 import com.cafeteria.cafeteria.repository.MenuItemRepository;
 import com.cafeteria.cafeteria.service.MenuItemService;
+import com.cafeteria.cafeteria.service.PromotionService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import java.util.List;
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
+    private final PromotionService promotionService;
 
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository) {
+    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, PromotionService promotionService) {
         this.menuItemRepository = menuItemRepository;
+        this.promotionService = promotionService;
     }
 
     @Override
@@ -57,6 +61,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         if (existingMenuItem == null) {
             throw new InternalServerErrorException(MyConstants.ERROR_MESSAGE_MENU_ITEM_NOT_FOUND);
         }
+        promotionService.deletePromotionByMenuItemId(id);
         menuItemRepository.deleteById(id);
     }
 

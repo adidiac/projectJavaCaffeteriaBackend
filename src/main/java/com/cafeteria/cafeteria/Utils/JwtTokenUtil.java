@@ -14,7 +14,7 @@ public class JwtTokenUtil {
     // keys need to be at least 256 bits long - 32 bytes
     private static final String SECRET_KEY_ADMIN = "secretAdmin000000000000000000000";
     private static final String SECRET_KEY_USER="secretUser0000000000000000000000";
-    private static final long VALIDITY_DURATION_MS = 3600000; // Token validity duration in milliseconds (e.g., 1 hour)
+    private static final long VALIDITY_DURATION_MS = 1000 * 60 * 60 * 24; // 1 day
 
     public String generateTokenAdmin(String username, String role) {
         Claims claims = Jwts.claims().setSubject(username);
