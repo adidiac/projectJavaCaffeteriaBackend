@@ -6,6 +6,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "ViewOrder", description = "ViewOrder model")
 public class ViewOrder {
     @NotBlank
     public String username;

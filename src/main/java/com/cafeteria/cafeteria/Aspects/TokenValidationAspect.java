@@ -4,8 +4,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
+import com.cafeteria.cafeteria.CustomExceptions.UnauthorizedException;
 import com.cafeteria.cafeteria.Utils.JwtTokenUtil;
 import com.cafeteria.cafeteria.ViewModels.UserAuthModel;
+import com.cafeteria.cafeteria.MyConstants;
 
 @Aspect
 @Component
@@ -32,16 +34,13 @@ public class TokenValidationAspect {
 
         // Validate token
         if (!jwtTokenUtil.validateTokenAdmin(token)) {
-            throw new RuntimeException("Invalid token");
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_TOKEN_INVALID);
         }
-
-       //  return jointPoint.proceed();
     }
 
     @Before("@annotation(ValidateTokenUser)")
     public void validateTokenBeforeMethodExecutionUser(JoinPoint jointPoint) {
-        // Get token from the request header or wherever it's present
-        // String token = request.getHeader("Authorization");
+       
         Object[] args = jointPoint.getArgs();
         String token = "";
         UserAuthModel user = null;
@@ -57,20 +56,20 @@ public class TokenValidationAspect {
         }
 
         if(user == null){
-            throw new RuntimeException("Invalid token");
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_TOKEN_INVALID);
         }
 
         token  = token.substring(7);
+        var userJwt= jwtTokenUtil.getUsernameUser(token);
 
-        if (!jwtTokenUtil.getUsernameUser(token).equals(user.username)) {
-            throw new RuntimeException("Invalid token");
+        if (userJwt!=null && !userJwt.equals(user.username)) {
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_TOKEN_INVALID);
         }
 
         // Validate token
         if (!jwtTokenUtil.validateTokenUser(token)) {
-            throw new RuntimeException("Invalid token");
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_TOKEN_INVALID);
         }
-
-       // return jointPoint.proceed();
+        
     }
 }

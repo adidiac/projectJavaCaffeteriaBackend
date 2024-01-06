@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cafeteria.cafeteria.Aspects.ValidateTokenAdmin;
 import com.cafeteria.cafeteria.Aspects.ValidateTokenUser;
 import com.cafeteria.cafeteria.ViewModels.CreateOrder;
+import com.cafeteria.cafeteria.ViewModels.UpdateOrderStatus;
 import com.cafeteria.cafeteria.ViewModels.ViewOrder;
 import com.cafeteria.cafeteria.service.OrderService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
 @RequestMapping("/api/orders")
+@Tag(name = "Orders", description = "Orders API for creating, getting, updating and deleting orders")
 public class OrderController {
     
     private final OrderService orderService;
@@ -33,8 +37,8 @@ public class OrderController {
 
     @GetMapping
     @ValidateTokenAdmin
-    public List<ViewOrder> getAllOrders(@RequestHeader("Authorization") String token) {
-        return orderService.getAllOrders();
+    public ResponseEntity<List<ViewOrder>> getAllOrders(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
     
 
@@ -42,12 +46,17 @@ public class OrderController {
     @ValidateTokenUser
     @Valid
     public ResponseEntity<Void> createOrder(@RequestBody CreateOrder createOrder, @RequestHeader("Authorization") String token) {
-        try {
-            orderService.createOrder(createOrder);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.noContent().build();
+        orderService.createOrder(createOrder);
+        return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/update-status")
+    @ValidateTokenAdmin
+    @Valid
+    public ResponseEntity<Void> updateOrderStatus(@RequestBody UpdateOrderStatus entity, @RequestHeader("Authorization") String token) {
+        orderService.updateOrderStatus(entity);
+        return ResponseEntity.ok().build();
+    }
+    
 
 }

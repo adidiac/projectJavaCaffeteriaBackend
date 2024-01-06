@@ -16,8 +16,11 @@ import com.cafeteria.cafeteria.Aspects.ValidateTokenAdmin;
 import com.cafeteria.cafeteria.DbModels.Inventory;
 import com.cafeteria.cafeteria.service.InventoryService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/inventory")
+@Tag(name = "Inventory", description = "Inventory API for creating, getting, updating and deleting inventory entries")
 public class InventoryController {
     private final InventoryService inventoryService;
 
@@ -35,22 +38,14 @@ public class InventoryController {
     @PostMapping
     @ValidateTokenAdmin
     public ResponseEntity<Void> createInventory(@RequestParam Inventory inventory) {
-        try {
-            inventoryService.createInventory(inventory);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        inventoryService.createInventory(inventory);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     @ValidateTokenAdmin
     public ResponseEntity<Void> updateInventory(@PathVariable Long id, @RequestParam Inventory inventory) {
-        try {
-            inventoryService.updateInventory(inventory);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        inventoryService.updateInventory(inventory);
         return ResponseEntity.ok().build();
     }
 

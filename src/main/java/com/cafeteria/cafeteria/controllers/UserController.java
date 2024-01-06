@@ -14,8 +14,11 @@ import com.cafeteria.cafeteria.ViewModels.UserModel;
 import com.cafeteria.cafeteria.ViewModels.UserRegisterModel;
 import com.cafeteria.cafeteria.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "Users", description = "Users API for creating, getting, updating and deleting users")
 public class UserController {
     
     private final UserService userService;
@@ -44,15 +47,11 @@ public class UserController {
     @Valid
     public ResponseEntity<UserModel> login(@RequestBody UserLoginModel userRegisterModel) {
         UserModel userModel = this.userService.login(userRegisterModel);
-
-
-
         if (userModel != null) {
             // create token
             String token = this.jwtTokenUtil.generateTokenUser(userModel.username, userModel.role);
             return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(userModel);
         }
-
         return ResponseEntity.badRequest().build();
     }
 }

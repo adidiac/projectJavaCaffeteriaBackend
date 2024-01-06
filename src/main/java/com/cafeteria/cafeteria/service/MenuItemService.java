@@ -14,4 +14,6 @@ public interface MenuItemService {
     MenuItem updateMenuItem(Long id, MenuItem menuItem);
 
     void deleteMenuItem(Long id);
+
+    MenuItem getMenuItemByName(String name);
 }

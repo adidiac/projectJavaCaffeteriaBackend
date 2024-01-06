@@ -1,5 +1,7 @@
 
 package com.cafeteria.cafeteria.service.Impl;
+import com.cafeteria.cafeteria.MyConstants;
+import com.cafeteria.cafeteria.CustomExceptions.InternalServerErrorException;
 import com.cafeteria.cafeteria.DbModels.MenuItem;
 import com.cafeteria.cafeteria.repository.MenuItemRepository;
 import com.cafeteria.cafeteria.service.MenuItemService;
@@ -18,14 +20,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public List<MenuItem> getAllMenuItems() {
-        try {
-            System.out.println("Getting all menu items");
-            System.out.println(menuItemRepository.findAll());
-            return menuItemRepository.findAll();
-        } catch (Exception e) {
-            System.out.println(e);
-            return null;
-        }
+        return menuItemRepository.findAll();
     }
 
     @Override
@@ -35,6 +30,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItem createMenuItem(MenuItem menuItem) {
+        if (this.getMenuItemByName(menuItem.getName()) != null) {
+            throw new InternalServerErrorException(MyConstants.ERROR_MESSAGE_MENU_ITEM_ALREADY_EXISTS);
+        }
         return menuItemRepository.save(menuItem);
     }
 
@@ -50,11 +48,20 @@ public class MenuItemServiceImpl implements MenuItemService {
 
             return menuItemRepository.save(existingMenuItem);
         }
-        return null; // or throw an exception if not found
+        throw new InternalServerErrorException(MyConstants.ERROR_MESSAGE_MENU_ITEM_NOT_FOUND);
     }
 
     @Override
     public void deleteMenuItem(Long id) {
+        MenuItem existingMenuItem = menuItemRepository.findById(id).orElse(null);
+        if (existingMenuItem == null) {
+            throw new InternalServerErrorException(MyConstants.ERROR_MESSAGE_MENU_ITEM_NOT_FOUND);
+        }
         menuItemRepository.deleteById(id);
+    }
+
+    @Override
+    public MenuItem getMenuItemByName(String name) {
+        return menuItemRepository.findAll().stream().filter(menuItem -> menuItem.getName().equals(name)).findFirst().orElse(null);
     }
 }

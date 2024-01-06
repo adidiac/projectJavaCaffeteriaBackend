@@ -4,6 +4,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "ViewOrderItem", description = "ViewOrderItem model")    
 public class ViewOrderItem {
     @NotBlank
     public String name;

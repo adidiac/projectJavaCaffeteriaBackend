@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+import com.cafeteria.cafeteria.MyConstants;
+import com.cafeteria.cafeteria.CustomExceptions.InternalServerErrorException;
 import com.cafeteria.cafeteria.DbModels.Order;
 import com.cafeteria.cafeteria.ViewModels.CreateOrder;
 import com.cafeteria.cafeteria.ViewModels.UpdateOrderStatus;
@@ -64,7 +66,8 @@ public class OrderServiceImpl implements OrderService {
             viewOrder.status = order.getOrderStatus();
             viewOrder.date = order.getOrderDate();
             viewOrder.menuItems = orderItemService.getAllOrderItemsByOrderId(order.getOrderId());
-            viewOrder.totalPrice = String.valueOf(viewOrder.menuItems.stream().mapToDouble(x -> Double.valueOf(x.price)).sum());    
+            viewOrder.totalPrice = String.valueOf(viewOrder.menuItems.stream().mapToDouble(x -> Double.valueOf(x.price)).sum());
+            viewOrders.add(viewOrder);    
         }
         return viewOrders;
     }
@@ -84,6 +87,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderStatus(UpdateOrderStatus updateOrderStatus) {
         var order = findById(updateOrderStatus.order_id);
+        if (order == null) {
+            throw new InternalServerErrorException(MyConstants.ERROR_MESSAGE_ORDER_NOT_FOUND);
+        }
         order.setOrderStatus(updateOrderStatus.status);
         save(order);
     }

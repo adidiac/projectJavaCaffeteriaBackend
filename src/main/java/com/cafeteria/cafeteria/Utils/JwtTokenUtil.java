@@ -56,8 +56,14 @@ public class JwtTokenUtil {
     }
 
     public String getUsernameUser(String token) {
-        Key SECRET_USER = Keys.hmacShaKeyFor(SECRET_KEY_USER.getBytes());
-        return Jwts.parserBuilder().setSigningKey(SECRET_USER).build().parseClaimsJws(token).getBody().getSubject();
+        try {
+            Key SECRET_USER = Keys.hmacShaKeyFor(SECRET_KEY_USER.getBytes());
+            var jwtparsed=Jwts.parserBuilder().setSigningKey(SECRET_USER).build().parseClaimsJws(token);
+            var body = jwtparsed.getBody();
+            return body.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String getUsernameAdmin(String token) {

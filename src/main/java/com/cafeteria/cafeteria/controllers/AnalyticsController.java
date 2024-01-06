@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.cafeteria.service.AnalyticsService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 @RestController
 @RequestMapping("/api/analytics")
+@Tag(name = "Analytics", description = "Analytics API for see the most popular items and most profitable dates")
 public class AnalyticsController {
     
     private final AnalyticsService analyticsService;
@@ -31,6 +35,4 @@ public class AnalyticsController {
         var mostProfitableDates = analyticsService.getMostProfitableDates();
         return ResponseEntity.ok(mostProfitableDates);
     }
-
-    // Other controller methods as needed
 }

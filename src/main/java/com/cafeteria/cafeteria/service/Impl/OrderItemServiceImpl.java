@@ -5,24 +5,30 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.cafeteria.cafeteria.MyConstants;
+import com.cafeteria.cafeteria.CustomExceptions.InternalServerErrorException;
 import com.cafeteria.cafeteria.DbModels.OrderItem;
 import com.cafeteria.cafeteria.ViewModels.CreateOrderItem;
 import com.cafeteria.cafeteria.ViewModels.ViewOrderItem;
 import com.cafeteria.cafeteria.repository.OrderItemRepository;
 import com.cafeteria.cafeteria.service.MenuItemService;
 import com.cafeteria.cafeteria.service.OrderItemService;
+import com.cafeteria.cafeteria.service.PromotionService;
 
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemRepository  orderItemRepository;
     private final MenuItemService  menuItemService;
+    private final PromotionService promotionService;
 
     public OrderItemServiceImpl(
         OrderItemRepository orderItemRepository,
-        MenuItemService menuItemService
+        MenuItemService menuItemService,
+        PromotionService promotionService
     ) {
         this.orderItemRepository = orderItemRepository;
         this.menuItemService = menuItemService;
+        this.promotionService = promotionService;
     }
 
     @Override
@@ -68,7 +74,6 @@ public class OrderItemServiceImpl implements OrderItemService {
             orderItemView.specialInstructions = orderItem.getSpecialInstructions();
             orderItemsView.add(orderItemView);
         }
-
         return orderItemsView;
     }
 
@@ -95,11 +100,18 @@ public class OrderItemServiceImpl implements OrderItemService {
         @Override 
     public void createOrderItem(CreateOrderItem CreateOrderItem, Long order_id) {
         var orderItem = new OrderItem();
+        if(menuItemService.getMenuItemById(CreateOrderItem.menuItemId) == null){
+            throw new InternalServerErrorException(MyConstants.ERROR_MESSAGE_MENU_ITEM_NOT_FOUND);
+        }
+        var calculatedPrice = promotionService.calculatePromotionPrice(menuItemService.getMenuItemById(CreateOrderItem.menuItemId).getPrice(), CreateOrderItem.menuItemId);
+
+        calculatedPrice = calculatedPrice * CreateOrderItem.quantity;
+
         orderItem.setMenuItemId(CreateOrderItem.menuItemId);
         orderItem.setOrderId(order_id);
         orderItem.setQuantity(CreateOrderItem.quantity);
         orderItem.setSpecialInstructions(CreateOrderItem.specialInstructions);
-        orderItem.setPrice((int)menuItemService.getMenuItemById(CreateOrderItem.menuItemId).getPrice());
+        orderItem.setPrice((int) Math.round(calculatedPrice));
         orderItemRepository.save(orderItem);
     }
 }

@@ -1,7 +1,10 @@
 package com.cafeteria.cafeteria.service.Impl;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.cafeteria.cafeteria.DbModels.Promotion;
@@ -46,5 +49,25 @@ public class PromotionServiceImpl implements PromotionService {
     public Promotion getPromotionById(Long id) {
         return promotionRepository.findById(id).orElseThrow();
     }
-    
+
+    @Override
+    public Double calculatePromotionPrice(Double price, Long menuItemId) {
+        var promotions = promotionRepository.findAll();
+        for (Promotion promotion : promotions) {
+            if (promotion.getMenuItemId() == menuItemId) {
+                LocalDate todayDate = LocalDate.now();
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                var promotionStartDate = LocalDate.parse(promotion.getStartDate(), formatter);
+                var promotionEndDate = LocalDate.parse(promotion.getEndDate(), formatter);
+
+                if (todayDate.isAfter(promotionStartDate) && todayDate.isBefore(promotionEndDate)) {
+                    return price - (price * promotion.getDiscount() / 100);
+                }
+
+                return price;
+            }
+        }
+        return price;
+    }
 }

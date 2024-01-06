@@ -4,6 +4,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "UserModel", description = "UserModel model")
 public class UserModel {
     @NotBlank
     @Null

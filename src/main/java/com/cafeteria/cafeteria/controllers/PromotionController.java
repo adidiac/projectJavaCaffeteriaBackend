@@ -15,8 +15,11 @@ import com.cafeteria.cafeteria.Aspects.ValidateTokenAdmin;
 import com.cafeteria.cafeteria.DbModels.Promotion;
 import com.cafeteria.cafeteria.service.PromotionService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/promotion")
+@Tag(name = "Promotion", description = "Promotion API for creating, getting, updating and deleting promotion entries")
 public class PromotionController {
     
     private final PromotionService promotionService;
@@ -35,32 +38,20 @@ public class PromotionController {
     @PostMapping
     @ValidateTokenAdmin
     public ResponseEntity<Void> createPromotion(@RequestParam Promotion promotion) {
-        try {
-            promotionService.createPromotion(promotion);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        promotionService.createPromotion(promotion);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
     @ValidateTokenAdmin
     public ResponseEntity<Void> updatePromotion(@RequestParam Promotion promotion) {
-        try {
-            promotionService.updatePromotion(promotion);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        promotionService.updatePromotion(promotion);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deletePromotion(@RequestParam Long id) {
-        try {
-            promotionService.deletePromotion(id);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        promotionService.deletePromotion(id);
         return ResponseEntity.ok().build();
     }
 

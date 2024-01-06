@@ -3,6 +3,9 @@ package com.cafeteria.cafeteria.ViewModels;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "UserRegisterModel", description = "UserRegisterModel model")
 public class UserRegisterModel {
     @NotBlank
     public String username = "";

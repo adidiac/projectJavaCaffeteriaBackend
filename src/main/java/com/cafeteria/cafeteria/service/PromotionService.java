@@ -15,4 +15,6 @@ public interface PromotionService {
     void deletePromotion(Long id);
 
     Promotion getPromotionById(Long id);
+
+    Double calculatePromotionPrice(Double price, Long menuItemId);
 }

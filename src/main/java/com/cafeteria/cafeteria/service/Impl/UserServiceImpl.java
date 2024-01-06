@@ -1,6 +1,8 @@
 package com.cafeteria.cafeteria.service.Impl;
 import org.springframework.stereotype.Service;
 
+import com.cafeteria.cafeteria.MyConstants;
+import com.cafeteria.cafeteria.CustomExceptions.UnauthorizedException;
 import com.cafeteria.cafeteria.DbModels.User;
 import com.cafeteria.cafeteria.ViewModels.UserLoginModel;
 import com.cafeteria.cafeteria.ViewModels.UserModel;
@@ -25,7 +27,7 @@ public class UserServiceImpl implements UserService {
         boolean userExist = users.stream().anyMatch(user -> user.getUsername().equals(userRegisterModel.username));
 
         if (userExist) {
-            return null;
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_USER_ALREADY_EXISTS);
         }
 
         User user = new User();
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
         var userSaved = this.userRepository.save(user);
         
         if (userSaved == null) {
-            return null;
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_USER_NOT_REGISTERED);
         }
 
         UserModel userModel = new UserModel();
@@ -55,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public UserModel login(UserLoginModel userLoginModel) {
         var user = this.userRepository.findAll().stream().filter(u -> u.getUsername().equals(userLoginModel.username) && u.getPassword().equals(userLoginModel.password)).findFirst().orElse(null);
         if (user == null) {
-            return null;
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_AUTH_FAILED);
         }
 
         UserModel userModel = new UserModel();
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public Long getUserIdByUsername(String username) {
         var user = this.userRepository.findAll().stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
         if (user == null) {
-            return null;
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_USER_NOT_FOUND);
         }
         return user.getUserId();
     }
