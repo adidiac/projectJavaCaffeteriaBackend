@@ -94,4 +94,39 @@ class CafeteriaApplicationTests {
 		
 		mockMvcMenuItem.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
 	}
+
+	@Test
+	void testGetOrders() throws Exception {
+		var JwtToken =  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwNDU4MDEyOSwiZXhwIjoxNzA0NjY2NTI5fQ.K-kStlutbOV7vtJYf3yf0pgiBpVzTBase4i0LbjBZgA";
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/orders").header("Authorization", JwtToken)
+				.accept(MediaType.APPLICATION_JSON);
+		mockMvcOrder.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	void testLogin() throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/login")
+				.accept(MediaType.APPLICATION_JSON)
+				.content("{\"username\":\"admin\",\"password\":\"admin\"}")
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		mockMvcUser.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	void testGetPromotions() throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/promotions")
+				.accept(MediaType.APPLICATION_JSON);
+		mockMvcPromotion.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	void testRegister () throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/register")
+				.accept(MediaType.APPLICATION_JSON)
+				.content("{\"username\":\"test\",\"password\":\"test\",\"role\":\"test\"}")
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		mockMvcUser.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
+	}
 }
