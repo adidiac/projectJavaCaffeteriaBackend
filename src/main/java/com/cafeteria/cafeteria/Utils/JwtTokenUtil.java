@@ -90,5 +90,17 @@ public class JwtTokenUtil {
             return false;
         }
     }
+
+    public String getUsernameFromToken(String token) {
+        // This method is used in JwtTokenFilter we don't know what type of token it is
+        // so we need to check if it's an admin token or a user token
+
+        if (validateTokenAdmin(token)) {
+            return getUsernameAdmin(token);
+        } else if (validateTokenUser(token)) {
+            return getUsernameUser(token);
+        }
+        return null;
+    }
     
 }

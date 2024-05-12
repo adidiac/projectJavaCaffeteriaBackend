@@ -1,5 +1,8 @@
 package com.cafeteria.cafeteria.controllers;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +35,9 @@ public class FeedbackController {
         this.feedbackService = feedbackService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @ValidateTokenAdmin
-    public ResponseEntity<List<Feedback>> getAllFeedback(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<Feedback>> getAll(@RequestHeader("Authorization") String token) {
         List<Feedback> feedbackEntries = feedbackService.getAllFeedback();
         return ResponseEntity.ok(feedbackEntries);
     }
@@ -46,5 +49,16 @@ public class FeedbackController {
         feedbackService.createFeedback(feedback);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping
+    @ValidateTokenAdmin
+    public ResponseEntity<Page<Feedback>> getAllFeedback(
+            @RequestHeader("Authorization") String token,
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<Feedback> feedbackEntries = feedbackService.getAllFeedback(pageable);
+        return ResponseEntity.ok(feedbackEntries);
+    }
+
+
 
 }

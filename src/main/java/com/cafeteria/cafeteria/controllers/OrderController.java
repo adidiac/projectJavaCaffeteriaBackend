@@ -43,7 +43,7 @@ public class OrderController {
     
 
     @PostMapping
-    @ValidateTokenUser
+   // @ValidateTokenUser
     @Valid
     public ResponseEntity<Void> createOrder(@RequestBody CreateOrder createOrder, @RequestHeader("Authorization") String token) {
         orderService.createOrder(createOrder);

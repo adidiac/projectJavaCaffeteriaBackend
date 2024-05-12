@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -20,6 +21,7 @@ import com.cafeteria.cafeteria.controllers.PromotionController;
 import com.cafeteria.cafeteria.controllers.UserController;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class CafeteriaApplicationTests {
 
 	@Autowired
@@ -74,7 +76,6 @@ class CafeteriaApplicationTests {
 		mockMvcMenuItem.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	// write tests for all the other controllers
 	@Test
 	void testDeleteMenuItem() throws Exception {
 		var JwtToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwNDU4MDEyOSwiZXhwIjoxNzA0NjY2NTI5fQ.K-kStlutbOV7vtJYf3yf0pgiBpVzTBase4i0LbjBZgA";

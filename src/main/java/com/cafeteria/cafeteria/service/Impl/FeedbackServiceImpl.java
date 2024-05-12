@@ -1,6 +1,7 @@
 package com.cafeteria.cafeteria.service.Impl;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.cafeteria.cafeteria.DbModels.Feedback;
@@ -56,6 +57,9 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedbackRepository.deleteById(id);
     }
 
-    // Other service methods as needed
+    @Override
+    public Page<Feedback> getAllFeedback(org.springframework.data.domain.Pageable pageable) {
+        return feedbackRepository.findAll(pageable);
+    }
 
 }

@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public Long getUserIdByUsername(String username) {
         var user = this.userRepository.findAll().stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
         if (user == null) {
-            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_USER_NOT_FOUND);
+            throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_AUTH_FAILED);
         }
         return user.getUserId();
     }

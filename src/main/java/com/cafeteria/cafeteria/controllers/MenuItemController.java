@@ -7,13 +7,18 @@ import com.cafeteria.cafeteria.service.MenuItemService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/menu-items")
 @Tag(name = "Menu Items", description = "Menu Items API for creating, getting, updating and deleting menu items")
 public class MenuItemController {
@@ -24,7 +29,7 @@ public class MenuItemController {
         this.menuItemService = menuItemService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<MenuItem>> getAllMenuItems() {
         return ResponseEntity.ok().body(menuItemService.getAllMenuItems());
     }
@@ -53,4 +58,22 @@ public class MenuItemController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/menuItems")
+    public String getMenuItems(Model model) {
+        model.addAttribute("menuItems", menuItemService.getAllMenuItems(PageRequest.of(0, 10)));
+        return "menuItems/menuItems"; // Thymeleaf template name
+    }
+
+    @GetMapping("/menuItemsPageable")
+    public String getMenuItemsPageable(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            Model model) {
+        
+        Page<MenuItem> menuItemsPage = menuItemService.getAllMenuItems(PageRequest.of(page, size, Sort.by(sortBy)));
+        model.addAttribute("menuItems", menuItemsPage);
+        
+        return "menuItems/menuItems"; // Thymeleaf template name
+    }    
 }

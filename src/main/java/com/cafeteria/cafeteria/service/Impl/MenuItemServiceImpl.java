@@ -7,17 +7,21 @@ import com.cafeteria.cafeteria.repository.MenuItemRepository;
 import com.cafeteria.cafeteria.service.MenuItemService;
 import com.cafeteria.cafeteria.service.PromotionService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
     private final PromotionService promotionService;
 
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, PromotionService promotionService) {
+    public MenuItemServiceImpl(
+        MenuItemRepository menuItemRepository, 
+        PromotionService promotionService
+    ) {
         this.menuItemRepository = menuItemRepository;
         this.promotionService = promotionService;
     }
@@ -68,5 +72,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public MenuItem getMenuItemByName(String name) {
         return menuItemRepository.findAll().stream().filter(menuItem -> menuItem.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Page<MenuItem> getAllMenuItems(Pageable pageable) {
+        return menuItemRepository.findAll(pageable);
     }
 }
