@@ -25,7 +25,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/feedback")
+@RequestMapping("/public/feedback")
 @Tag(name = "Feedback", description = "Feedback API for creating and getting feedbacks")
 public class FeedbackController {
 

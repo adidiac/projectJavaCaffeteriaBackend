@@ -1,8 +1,13 @@
 package com.cafeteria.cafeteria.DbModels;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -12,17 +17,22 @@ public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long promotion_id;
-    private int menu_item_id;
     private double discount;
     private String start_date;
     private String end_date;
 
+    @ManyToMany
+    @JoinTable(
+        name = "promotion_menu_item",
+        joinColumns = @JoinColumn(name = "promotion_id"),
+        inverseJoinColumns = @JoinColumn(name = "menu_item_id"))
+    private List<MenuItem> menuItems;
+
     public Promotion() {
     }
 
-    public Promotion(Long promotion_id, int menu_item_id, double discount, String start_date, String end_date) {
+    public Promotion(Long promotion_id, double discount, String start_date, String end_date) {
         this.promotion_id = promotion_id;
-        this.menu_item_id = menu_item_id;
         this.discount = discount;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -34,14 +44,6 @@ public class Promotion {
 
     public void setPromotionId(Long promotion_id) {
         this.promotion_id = promotion_id;
-    }
-
-    public int getMenuItemId() {
-        return this.menu_item_id;
-    }
-
-    public void setMenuItemId(int menu_item_id) {
-        this.menu_item_id = menu_item_id;
     }
 
     public double getDiscount() {
@@ -75,10 +77,13 @@ public class Promotion {
     public String toString() {
         return "{" +
             " promotion_id='" + getPromotionId() + "'" +
-            ", menu_item_id='" + getMenuItemId() + "'" +
             ", discount='" + getDiscount() + "'" +
             ", start_date='" + getStartDate() + "'" +
             ", end_date='" + getEndDate() + "'" +
             "}";
+    }
+
+    public List<MenuItem> getMenuItems() {
+        return this.menuItems;
     }
 }

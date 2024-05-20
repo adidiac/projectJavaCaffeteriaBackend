@@ -1,10 +1,15 @@
 package com.cafeteria.cafeteria.DbModels;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,6 +25,12 @@ public class User {
     private String full_name;
     private String email;
     private String role;
+    
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Profile profile;
 
     public User() {
     }
@@ -106,5 +117,9 @@ public class User {
             ", email='" + getEmail() + "'" +
             ", role='" + getRole() + "'" +
             "}";
+    }
+
+    public List<Order> getOrders() {
+        return this.orders;
     }
 }

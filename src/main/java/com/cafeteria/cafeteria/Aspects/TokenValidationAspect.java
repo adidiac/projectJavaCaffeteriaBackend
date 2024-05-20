@@ -30,10 +30,10 @@ public class TokenValidationAspect {
             }
         }
 
-        token  = token.substring(7);
+        var tokenSubtract  = token.substring(7);
 
         // Validate token
-        if (!jwtTokenUtil.validateTokenAdmin(token)) {
+        if (!jwtTokenUtil.validateTokenAdmin(tokenSubtract)) {
             throw new UnauthorizedException(MyConstants.ERROR_MESSAGE_TOKEN_INVALID);
         }
     }

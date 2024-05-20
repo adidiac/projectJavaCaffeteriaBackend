@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/public/orders")
 @Tag(name = "Orders", description = "Orders API for creating, getting, updating and deleting orders")
 public class OrderController {
     
@@ -43,7 +43,6 @@ public class OrderController {
     
 
     @PostMapping
-   // @ValidateTokenUser
     @Valid
     public ResponseEntity<Void> createOrder(@RequestBody CreateOrder createOrder, @RequestHeader("Authorization") String token) {
         orderService.createOrder(createOrder);

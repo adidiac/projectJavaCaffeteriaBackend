@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
 
         for (Order order : orders) {
             var viewOrder = new ViewOrder();
-            viewOrder.username = userRepository.findById(order.getUserId()).orElse(null).getUsername();
+            viewOrder.username = userRepository.findById(order.getUser().getUserId()).orElse(null).getUsername();
             viewOrder.status = order.getOrderStatus();
             viewOrder.date = order.getOrderDate();
             viewOrder.menuItems = orderItemService.getAllOrderItemsByOrderId(order.getOrderId());
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void createOrder(CreateOrder createOrder) {
         var order = new Order();
-        order.setUserId(userService.getUserIdByUsername(createOrder.username));
+        order.setUser(userRepository.findById(userService.getUserIdByUsername(createOrder.username)).orElse(null));
         order.setOrderStatus("Pending");
         order.setDateFromLocalDate();
         save(order);
@@ -102,5 +102,16 @@ public class OrderServiceImpl implements OrderService {
             totalPrice += Integer.valueOf(orderItem.price);
         }
         return totalPrice;
+    }
+    public void deleteOrderWhenMenuItemsDeleted(Long menu_item_id) {
+        var orders = findAll();
+        for (var order : orders) {
+            var orderItems = orderItemService.findByOrderId(order.getOrderId());
+            for (var orderItem : orderItems) {
+                if (orderItem.getMenuItemId() == menu_item_id) {
+                    orderItemService.deleteById(orderItem.getId());
+                }
+            }
+        }
     }
 }

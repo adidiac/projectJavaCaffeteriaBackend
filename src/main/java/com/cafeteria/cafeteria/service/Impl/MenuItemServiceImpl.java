@@ -3,8 +3,10 @@ package com.cafeteria.cafeteria.service.Impl;
 import com.cafeteria.cafeteria.MyConstants;
 import com.cafeteria.cafeteria.CustomExceptions.InternalServerErrorException;
 import com.cafeteria.cafeteria.DbModels.MenuItem;
+import com.cafeteria.cafeteria.ViewModels.MenuItemDto;
 import com.cafeteria.cafeteria.repository.MenuItemRepository;
 import com.cafeteria.cafeteria.service.MenuItemService;
+import com.cafeteria.cafeteria.service.OrderService;
 import com.cafeteria.cafeteria.service.PromotionService;
 
 import org.springframework.data.domain.Page;
@@ -21,7 +23,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public MenuItemServiceImpl(
         MenuItemRepository menuItemRepository, 
         PromotionService promotionService
-    ) {
+        ) {
         this.menuItemRepository = menuItemRepository;
         this.promotionService = promotionService;
     }
@@ -75,7 +77,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public Page<MenuItem> getAllMenuItems(Pageable pageable) {
-        return menuItemRepository.findAll(pageable);
+    public Page<MenuItemDto> getAllMenuItems(Pageable pageable) {
+        return menuItemRepository.findAll(pageable).map(MenuItemDto::new);
     }
 }

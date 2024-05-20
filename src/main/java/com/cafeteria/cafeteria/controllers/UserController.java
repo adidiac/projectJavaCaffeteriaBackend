@@ -17,7 +17,7 @@ import com.cafeteria.cafeteria.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/public/users")
 @Tag(name = "Users", description = "Users API for creating, getting, updating and deleting users")
 public class UserController {
     

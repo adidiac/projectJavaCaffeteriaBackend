@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria.controllers;
 
 import com.cafeteria.cafeteria.Aspects.ValidateTokenAdmin;
 import com.cafeteria.cafeteria.DbModels.MenuItem;
+import com.cafeteria.cafeteria.ViewModels.MenuItemDto;
 import com.cafeteria.cafeteria.service.MenuItemService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,8 +19,10 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 @Controller
-@RequestMapping("/api/menu-items")
+@RequestMapping("/public/menu-items")
 @Tag(name = "Menu Items", description = "Menu Items API for creating, getting, updating and deleting menu items")
 public class MenuItemController {
 
@@ -41,12 +44,14 @@ public class MenuItemController {
 
     @PostMapping
     @ValidateTokenAdmin
+    @Valid
     public ResponseEntity<MenuItem> createMenuItem(@RequestBody MenuItem menuItem, @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(menuItemService.createMenuItem(menuItem));
     }
 
     @PutMapping("/{id}")
     @ValidateTokenAdmin
+     @Valid
     public ResponseEntity<MenuItem> updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem, @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(menuItemService.updateMenuItem(id, menuItem));
     }
@@ -58,7 +63,7 @@ public class MenuItemController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/menuItems")
+    @GetMapping("/menuItems") 
     public String getMenuItems(Model model) {
         model.addAttribute("menuItems", menuItemService.getAllMenuItems(PageRequest.of(0, 10)));
         return "menuItems/menuItems"; // Thymeleaf template name
@@ -67,13 +72,25 @@ public class MenuItemController {
     @GetMapping("/menuItemsPageable")
     public String getMenuItemsPageable(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "3") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             Model model) {
         
-        Page<MenuItem> menuItemsPage = menuItemService.getAllMenuItems(PageRequest.of(page, size, Sort.by(sortBy)));
+        Page<MenuItemDto> menuItemsPage = menuItemService.getAllMenuItems(PageRequest.of(page, size, Sort.by(sortBy)));
         model.addAttribute("menuItems", menuItemsPage);
         
         return "menuItems/menuItems"; // Thymeleaf template name
-    }    
+    }
+
+    @GetMapping("/add")
+    public String showAddMenuItemForm() {
+        return "menuItems/addMenu";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditMenuItemForm(@PathVariable Long id, Model model) {
+        MenuItem menuItem = menuItemService.getMenuItemById(id);
+        model.addAttribute("menuItem", menuItem);
+        return "menuItems/editMenu";
+    }
 }

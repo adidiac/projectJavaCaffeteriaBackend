@@ -35,7 +35,6 @@ public class PromotionServiceImpl implements PromotionService {
         promotionToUpdate.setDiscount(promotion.getDiscount());
         promotionToUpdate.setEndDate(promotion.getEndDate());
         promotionToUpdate.setStartDate(promotion.getStartDate());
-        promotionToUpdate.setMenuItemId(promotion.getMenuItemId());
         return promotionRepository.save(promotionToUpdate);
     }
 
@@ -53,7 +52,7 @@ public class PromotionServiceImpl implements PromotionService {
     public Double calculatePromotionPrice(Double price, Long menuItemId) {
         var promotions = promotionRepository.findAll();
         for (Promotion promotion : promotions) {
-            if (promotion.getMenuItemId() == menuItemId) {
+            if (promotion.getMenuItems().stream().anyMatch(menuItem -> menuItem.getId() == menuItemId)) {
                 LocalDate todayDate = LocalDate.now();
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -74,7 +73,7 @@ public class PromotionServiceImpl implements PromotionService {
     public void deletePromotionByMenuItemId(Long menuItemId) {
         var promotions = promotionRepository.findAll();
         for (Promotion promotion : promotions) {
-            if (promotion.getMenuItemId() == menuItemId) {
+            if (promotion.getMenuItems().stream().anyMatch(menuItem -> menuItem.getId() == menuItemId)) {
                 promotionRepository.deleteById(promotion.getPromotionId());
             }
         }

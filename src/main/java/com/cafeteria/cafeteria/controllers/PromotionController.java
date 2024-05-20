@@ -29,21 +29,18 @@ public class PromotionController {
     }
 
     @GetMapping
-    @ValidateTokenAdmin
     public ResponseEntity<List<Promotion>> getAllPromotions() {
         List<Promotion> promotionEntries = promotionService.getAllPromotions();
         return ResponseEntity.ok(promotionEntries);
     }
 
     @PostMapping
-    @ValidateTokenAdmin
     public ResponseEntity<Void> createPromotion(@RequestParam Promotion promotion) {
         promotionService.createPromotion(promotion);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
-    @ValidateTokenAdmin
     public ResponseEntity<Void> updatePromotion(@RequestParam Promotion promotion) {
         promotionService.updatePromotion(promotion);
         return ResponseEntity.ok().build();

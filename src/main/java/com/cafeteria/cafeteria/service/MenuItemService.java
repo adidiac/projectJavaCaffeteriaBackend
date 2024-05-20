@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.cafeteria.cafeteria.DbModels.MenuItem;
+import com.cafeteria.cafeteria.ViewModels.MenuItemDto;
 
 public interface MenuItemService {
 
@@ -20,5 +21,5 @@ public interface MenuItemService {
 
     MenuItem getMenuItemByName(String name);
 
-    Page<MenuItem> getAllMenuItems(Pageable pageable);
+    Page<MenuItemDto> getAllMenuItems(Pageable pageable);
 }
